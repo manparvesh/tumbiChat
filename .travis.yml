@@ -1,0 +1,13 @@
+language:
+  - cpp
+
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
+  - ./tumbiChat &
+  - ./tumbiClient &
+
+notifications:
+  email: false
