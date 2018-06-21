@@ -30,20 +30,20 @@ void error(string message) {
 }
 
 void *reader(void *param) {
-    int sockfd = (int) param;
+    int socket_fd = (int) param;
     char buffer[1024];
     ssize_t n;
     do {
         bzero(buffer, 1023);
-        n = read(sockfd, buffer, 1023);
+        n = read(socket_fd, buffer, 1023);
         buffer[n] = '\0';
-        printf("Other: %s", buffer);
+        printf("tumbiChat: %s", buffer);
     } while (n > 0);
     pthread_exit(nullptr);
 }
 
 void *writer(void *param) {
-    int sockfd = (int) param;
+    int socket_fd = (int) param;
     char buffer[1024];
     ssize_t n = 0;
     do {
@@ -54,7 +54,7 @@ void *writer(void *param) {
         if (len > 0) {
             buffer[len] = '\n';
             buffer[len + 1] = '\0';
-            n = write(sockfd, buffer, strlen(buffer));
+            n = write(socket_fd, buffer, strlen(buffer));
         }
     } while (n > 0);
     pthread_exit(nullptr);
