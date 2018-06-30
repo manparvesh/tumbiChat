@@ -30,6 +30,7 @@
 
 #include<vector>
 #include <map>
+#include <fstream>
 
 using namespace std;
 
@@ -81,6 +82,9 @@ void *reader(void *parameters) {
     char buffer[BUFFER_SIZE];
     ssize_t n;
 
+    ofstream logFile;
+    logFile.open("tumbi.log");
+
     do {
         bzero(buffer, BUFFER_MAX_INDEX);
         n = read(socket_fd, buffer, BUFFER_MAX_INDEX);
@@ -95,6 +99,7 @@ void *reader(void *parameters) {
         } else {
             username = userNameList[socket_fd];
             cout << currentDateTime() << " : " << username << " : " << buffer_string;
+            logFile << currentDateTime() << " : " << username << " : " << buffer_string;
 
             string messageStringWithSenderName = userNameList[socket_fd] + "> " + buffer_string;
             const char *messageCharArrayWithSenderAndReceiverName = messageStringWithSenderName.c_str();
@@ -110,6 +115,7 @@ void *reader(void *parameters) {
         }
     } while (n > 0);
 
+    logFile.close();
     pthread_exit(nullptr);
 }
 
