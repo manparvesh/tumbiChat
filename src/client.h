@@ -8,12 +8,14 @@
 
 #include<stdio.h>
 #include<string.h>
+#include <string>
 #include<stdlib.h>
 #include<unistd.h> //read and write
 #include<netinet/in.h>
 #include<sys/socket.h>
 #include<netdb.h>
 #include<pthread.h> //threading
+#include <map>
 
 #include<arpa/inet.h> //inet_ntop
 
@@ -23,6 +25,8 @@
 int PROXY_PORT = 5000;
 
 using namespace std;
+
+map<int, string> userNameList;
 
 void error(string message) {
     perror(message.c_str());
@@ -48,7 +52,18 @@ void *writer(void *param) {
     ssize_t n = 0;
     do {
         bzero(buffer, 1023);
+        string username = "New user";
         scanf("%[^\n]", buffer);
+        if (userNameList.find(socket_fd) == userNameList.end()){
+            username = buffer;
+            userNameList[socket_fd] = username;
+            cout << "Welcome, " << username << "!!" << endl;
+        } else {
+            username = userNameList[socket_fd];
+        }
+
+        cout << username << "> ";
+
         getchar();
         size_t len = strlen(buffer);
         if (len > 0) {

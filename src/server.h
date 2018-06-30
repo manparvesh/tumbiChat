@@ -25,7 +25,7 @@
 #define BUFFER_SIZE 1024
 #define BUFFER_MAX_INDEX 1023
 #define FLUSH  {fflush(stdout);}
-#define MESSAGE_SIZE 256
+#define MESSAGE_SIZE 512
 
 #include<vector>
 #include <map>
@@ -34,7 +34,7 @@ using namespace std;
 
 int PROXY_PORT = 5000;
 
-map<int, string> usernames;
+map<int, string> userNameList;
 
 void error(string message) {
     perror(message.c_str());
@@ -74,22 +74,13 @@ void *reader(void *parameters) {
         buffer[n] = '\0';
         string username = "New User";
         string buffer_string(buffer);
-        if (usernames.find(socket_fd) == usernames.end()){
+        if (userNameList.find(socket_fd) == userNameList.end()){
             buffer_string.erase(buffer_string.find_last_not_of("\n") + 1);
             username = buffer_string;
-            usernames[socket_fd] = username;
-            cout << "New user added: " << username << endl;
-            char welcome_message[BUFFER_SIZE];
-            sprintf(welcome_message, "Welcome, %s!!\n", username.c_str());
-            n = write(socket_fd, welcome_message, strlen(welcome_message));
-            pthread_t threads[1];
-            pthread_create(&threads[0], nullptr, writer, (void *) socket_fd);
-            pthread_join(threads[0], nullptr);
-            FLUSH;
-            // close(socket_fd);
+            userNameList[socket_fd] = username;
         } else {
-            username = usernames[socket_fd];
-            cout << socket_fd << ":" << username << ": " << buffer_string << endl;
+            username = userNameList[socket_fd];
+            cout << socket_fd << ":" << username << ": " << buffer_string;
         }
     } while (n > 0);
 

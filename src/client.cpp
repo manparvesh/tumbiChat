@@ -13,8 +13,6 @@ int main(int argc, char **argv) {
     struct sockaddr_in serv_addr;
     struct hostent *server;
 
-
-    int n;
     //address of server
     //create a socket
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
