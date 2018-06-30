@@ -7,7 +7,7 @@
   <p>A simple chat server written in C++</p>
 </div>
 
-![](https://github.com/manparvesh/tumbiChat/raw/master/demo.gif)
+[![](https://github.com/manparvesh/tumbiChat/raw/master/demo.gif)](https://asciinema.org/a/hzKAqrxpKyGhL4obnoQYGXPDE?speed=2&theme=solarized-light&autoplay=1)
 
 ## Building
 ```
