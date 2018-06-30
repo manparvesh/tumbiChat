@@ -7,6 +7,8 @@
   <p>A simple chat server written in C++</p>
 </div>
 
+![](demo.gif)
+
 ## Building
 ```
 > git clone https://github.com/manparvesh/tumbiChat.git 
@@ -20,10 +22,8 @@
 - After compilation, go to the build directory.
 - Run `./tumbiServer` with or without port as an argument to start the server.
 - Run `./tumbiClient` with or without server port as an argument to connect to the server. Multiple users can connect to the server
-- Messages sent will only be sent to the server logs right now.
-
-## TODO
-See [issues](https://github.com/manparvesh/tumbiChat/issues).
+- Messages sent be sent to all the connected users.
+- all the messages will also be saved in a log file where the server is run.
 
 ## LICENSE
 ```
