@@ -33,6 +33,7 @@ void error(string message) {
     exit(1);
 }
 
+
 void *reader(void *param) {
     int socket_fd = (int) param;
     char buffer[1024];
@@ -41,7 +42,11 @@ void *reader(void *param) {
         bzero(buffer, 1023);
         n = read(socket_fd, buffer, 1023);
         buffer[n] = '\0';
-        printf("tumbiChat: %s", buffer);
+        string username = "";
+        if (userNameList.find(socket_fd) != userNameList.end()){
+            username = userNameList[socket_fd];
+        }
+        printf("\nTumbiChat: %s", buffer);
     } while (n > 0);
     pthread_exit(nullptr);
 }

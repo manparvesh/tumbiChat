@@ -18,6 +18,7 @@
 #include<arpa/inet.h>
 #include<pthread.h> //threading
 #include<map>
+#include <time.h>
 
 #include<ctype.h>
 
@@ -39,6 +40,19 @@ map<int, string> userNameList;
 void error(string message) {
     perror(message.c_str());
     exit(1);
+}
+
+// Get current date/time, format is YYYY-MM-DD.HH:mm:ss
+const std::string currentDateTime() {
+    time_t now = time(0);
+    struct tm tstruct;
+    char buf[80];
+    tstruct = *localtime(&now);
+    // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
+    // for more information about date/time format
+    strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+
+    return buf;
 }
 
 void *writer(void *parameters) {
@@ -74,13 +88,25 @@ void *reader(void *parameters) {
         buffer[n] = '\0';
         string username = "New User";
         string buffer_string(buffer);
-        if (userNameList.find(socket_fd) == userNameList.end()){
+        if (userNameList.find(socket_fd) == userNameList.end()) {
             buffer_string.erase(buffer_string.find_last_not_of("\n") + 1);
             username = buffer_string;
             userNameList[socket_fd] = username;
         } else {
             username = userNameList[socket_fd];
-            cout << socket_fd << ":" << username << ": " << buffer_string;
+            cout << currentDateTime() << " : " << username << " : " << buffer_string;
+
+            string messageStringWithSenderName = userNameList[socket_fd] + "> " + buffer_string;
+            const char *messageCharArrayWithSenderAndReceiverName = messageStringWithSenderName.c_str();
+
+            // send to others
+            for (auto uName : userNameList) {
+                int socket_fd_i = uName.first;
+                if (socket_fd_i != socket_fd) {
+                    n = write(socket_fd_i, messageCharArrayWithSenderAndReceiverName,
+                              strlen(messageCharArrayWithSenderAndReceiverName));
+                }
+            }
         }
     } while (n > 0);
 
