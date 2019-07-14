@@ -5,23 +5,22 @@
 #ifndef TUMBICHAT_CLIENT_H
 #define TUMBICHAT_CLIENT_H
 
-
-#include<stdio.h>
-#include<string.h>
-#include <string>
-#include<stdlib.h>
-#include<unistd.h> //read and write
-#include<netinet/in.h>
-#include<sys/socket.h>
-#include<netdb.h>
-#include<pthread.h> //threading
+#include <netdb.h>
+#include <netinet/in.h>
+#include <pthread.h>  //threading
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <unistd.h>  //read and write
 #include <map>
+#include <string>
 
-#include<arpa/inet.h> //inet_ntop
+#include <arpa/inet.h>  //inet_ntop
 
-#include<iostream>
+#include <iostream>
 
-#define PROXY "127.0.0.1" //your ip address
+#define PROXY "127.0.0.1"  //your ip address
 int PROXY_PORT = 5000;
 
 using namespace std;
@@ -33,9 +32,8 @@ void error(string message) {
     exit(1);
 }
 
-
 void *reader(void *param) {
-    int socket_fd = (int) param;
+    int socket_fd = (int)param;
     char buffer[1024];
     ssize_t n;
     do {
@@ -43,7 +41,7 @@ void *reader(void *param) {
         n = read(socket_fd, buffer, 1023);
         buffer[n] = '\0';
         string username = "";
-        if (userNameList.find(socket_fd) != userNameList.end()){
+        if (userNameList.find(socket_fd) != userNameList.end()) {
             username = userNameList[socket_fd];
         }
         printf("\nTumbiChat: %s", buffer);
@@ -52,14 +50,14 @@ void *reader(void *param) {
 }
 
 void *writer(void *param) {
-    int socket_fd = (int) param;
+    int socket_fd = (int)param;
     char buffer[1024];
     ssize_t n = 0;
     do {
         bzero(buffer, 1023);
         string username = "New user";
         scanf("%[^\n]", buffer);
-        if (userNameList.find(socket_fd) == userNameList.end()){
+        if (userNameList.find(socket_fd) == userNameList.end()) {
             username = buffer;
             userNameList[socket_fd] = username;
             cout << "Welcome, " << username << "!!" << endl;
@@ -80,5 +78,4 @@ void *writer(void *param) {
     pthread_exit(nullptr);
 }
 
-
-#endif //TUMBICHAT_CLIENT_H
+#endif  //TUMBICHAT_CLIENT_H

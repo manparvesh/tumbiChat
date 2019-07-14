@@ -5,32 +5,33 @@
 #ifndef TUMBICHAT_SERVER_H
 #define TUMBICHAT_SERVER_H
 
-#include<iostream>
-#include<cstdio>
-#include<sys/types.h>
-#include<cstdlib>
-#include<string.h>
-#include<string>
-#include<unistd.h>
-#include<netinet/in.h> // for struct sockaddr_in
-#include<sys/socket.h> //for socket() and Defined constants
-#include<netdb.h>
-#include<arpa/inet.h>
-#include<pthread.h> //threading
-#include<map>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <netinet/in.h>  // for struct sockaddr_in
+#include <pthread.h>     //threading
+#include <string.h>
+#include <sys/socket.h>  //for socket() and Defined constants
+#include <sys/types.h>
 #include <time.h>
+#include <unistd.h>
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
+#include <map>
+#include <string>
 
-#include<ctype.h>
+#include <ctype.h>
 
 #define MAX_THREADS 100
 #define BUFFER_SIZE 1024
 #define BUFFER_MAX_INDEX 1023
-#define FLUSH  {fflush(stdout);}
+#define FLUSH \
+    { fflush(stdout); }
 #define MESSAGE_SIZE 512
 
-#include<vector>
-#include <map>
 #include <fstream>
+#include <map>
+#include <vector>
 
 using namespace std;
 
@@ -57,7 +58,7 @@ const std::string currentDateTime() {
 }
 
 void *writer(void *parameters) {
-    int socket_fd = (int) parameters;
+    int socket_fd = (int)parameters;
     char buffer[BUFFER_SIZE];
     ssize_t n = 0;
 
@@ -76,9 +77,8 @@ void *writer(void *parameters) {
     pthread_exit(nullptr);
 }
 
-
 void *reader(void *parameters) {
-    int socket_fd = (int) parameters;
+    int socket_fd = (int)parameters;
     char buffer[BUFFER_SIZE];
     ssize_t n;
 
@@ -122,7 +122,7 @@ void *reader(void *parameters) {
 void *process_client(void *args) {
     FLUSH;
     ssize_t n;
-    int new_socket_fd = (int) args;
+    int new_socket_fd = (int)args;
 
     char send[MESSAGE_SIZE];
     bzero(send, MESSAGE_SIZE);
@@ -130,21 +130,22 @@ void *process_client(void *args) {
     char receive[MESSAGE_SIZE];
     bzero(receive, MESSAGE_SIZE);
 
-    sprintf(send, "\n"
-                  "::::::::::: :::    ::: ::::    ::::  :::::::::  ::::::::::: \n"
-                  "    :+:     :+:    :+: +:+:+: :+:+:+ :+:    :+:     :+:     \n"
-                  "    +:+     +:+    +:+ +:+ +:+:+ +:+ +:+    +:+     +:+     \n"
-                  "    +#+     +#+    +:+ +#+  +:+  +#+ +#++:++#+      +#+     \n"
-                  "    +#+     +#+    +#+ +#+       +#+ +#+    +#+     +#+     \n"
-                  "    #+#     #+#    #+# #+#       #+# #+#    #+#     #+#     \n"
-                  "    ###      ########  ###       ### #########  ########### \n"
-                  "Welcome to TumbiChat! Please enter your preferred username:\n");
+    sprintf(send,
+            "\n"
+            "::::::::::: :::    ::: ::::    ::::  :::::::::  ::::::::::: \n"
+            "    :+:     :+:    :+: +:+:+: :+:+:+ :+:    :+:     :+:     \n"
+            "    +:+     +:+    +:+ +:+ +:+:+ +:+ +:+    +:+     +:+     \n"
+            "    +#+     +#+    +:+ +#+  +:+  +#+ +#++:++#+      +#+     \n"
+            "    +#+     +#+    +#+ +#+       +#+ +#+    +#+     +#+     \n"
+            "    #+#     #+#    #+# #+#       #+# #+#    #+#     #+#     \n"
+            "    ###      ########  ###       ### #########  ########### \n"
+            "Welcome to TumbiChat! Please enter your preferred username:\n");
 
     n = write(new_socket_fd, send, strlen(send));
 
     pthread_t threads[2];
-    pthread_create(&threads[0], nullptr, reader, (void *) new_socket_fd);
-    pthread_create(&threads[1], nullptr, writer, (void *) new_socket_fd);
+    pthread_create(&threads[0], nullptr, reader, (void *)new_socket_fd);
+    pthread_create(&threads[1], nullptr, writer, (void *)new_socket_fd);
 
     pthread_join(threads[0], nullptr);
     pthread_join(threads[1], nullptr);
@@ -155,5 +156,4 @@ void *process_client(void *args) {
     pthread_exit(nullptr);
 }
 
-
-#endif //TUMBICHAT_SERVER_H
+#endif  //TUMBICHAT_SERVER_H

@@ -1,7 +1,7 @@
 <div align="center">
   <h1>tumbiChat</h1>
 
-  <a href="https://travis-ci.org/manparvesh/tumbiChat/builds" target="_blank"><img src="https://img.shields.io/travis-ci/manparvesh/tumbiChat.svg?style=for-the-badge" alt="Build Status"></a> 
+  <a href="https://travis-ci.org/manparvesh/tumbiChat/builds" target="_blank"><img src="https://img.shields.io/travis/manparvesh/tumbiChat.svg?style=for-the-badge" alt="Build Status"></a> 
   <a href="https://manparvesh.mit-license.org/" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=for-the-badge" alt="License"></a> 
   
   <p>A simple chat server written in C++</p>

@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
     server_address.sin_addr.s_addr = INADDR_ANY;
 
     // bind created socket to the sockaddr_in
-    if (bind(socket_fd, (struct sockaddr *) &server_address,
+    if (bind(socket_fd, (struct sockaddr *)&server_address,
              sizeof(struct sockaddr)) < 0) {
         error("Unable to bind");
     }
@@ -45,10 +45,10 @@ int main(int argc, char **argv) {
     int number = 0;
 
     while (number < MAX_THREADS) {
-        new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_address,
+        new_socket_fd = accept(socket_fd, (struct sockaddr *)&client_address,
                                &client_length);
         cout << "new_socket_fd: " << new_socket_fd << endl;
-        pthread_create(&threads[number++], nullptr, &process_client, (void *) new_socket_fd);
+        pthread_create(&threads[number++], nullptr, &process_client, (void *)new_socket_fd);
     }
 
     for (int i = 0; i < number; i++) {
